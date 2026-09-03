@@ -30,5 +30,19 @@ autodoc_member_order = "bysource"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "furo"
-html_static_path = ['_static']
+html_theme = "sphinx_rtd_theme"
+
+# "Edit on GitHub" link in the top-right
+html_context = {
+    "display_github": True,
+    "github_user": "YOUR_GITHUB_USERNAME",
+    "github_repo": "autoDB",
+    "github_version": "main",      # your default branch
+    "conf_py_path": "/docs/",      # path to the folder containing conf.py
+}
+
+html_theme_options = {
+    "navigation_depth": 4,
+    "collapse_navigation": False,
+    "sticky_navigation": True,
+}

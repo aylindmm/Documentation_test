@@ -9,4 +9,6 @@ aTUNApy documentation
 .. toctree::
    :maxdepth: 2
 
+   installation
+   usage
    api
