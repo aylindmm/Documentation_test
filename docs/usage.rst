@@ -15,6 +15,8 @@ Installation
 
 Before start
 ------------------------
+.. note::
+   Please ensure that you keep your API keys secure and do not share them publicly.
 
 .. code-block:: python
 
@@ -56,17 +58,20 @@ and then load the .env file in your script:
 
 How to get API keys
 ------------------------
-For OpenAI, you can get your API key by signing up at https://openai.com/es-419/api/
 
-For Groq, you can obtain your API token by signing up at https://console.groq.com/home
+You can get your API key by signing up at the following links:
 
-For Gemini, you can get your API key by signing up at https://aistudio.google.com/api-keys
+OpenAI: https://openai.com/es-419/api/
 
-For Anthropic, you can obtain your API key by signing up at https://platform.claude.com/docs/en/get-api-key
+Groq: https://console.groq.com/home
 
-Important: Please ensure that you keep your API keys secure and do not share them publicly.
+Gemini: https://aistudio.google.com/api-keys
 
-Take into consideration that some of the LLMs have usage limits or costs associated with their usage, so be sure to review the terms and conditions of each provider.
+Anthropic: https://platform.claude.com/docs/en/get-api-key
+
+
+.. note::
+   Take into consideration that some of the LLMs have usage limits or costs associated with their usage, so be sure to review the terms and conditions of each provider.
 
 
 Step 1 — Search PubMed
@@ -83,8 +88,7 @@ identifiers and metadata.
 
 .. note::
 
-   NCBI E-utilities apply rate limits. Providing an API key and an e-mail
-   address is recommended for large queries.
+   NCBI E-utilities do not required an API key or email, however they apply rate limits. Providing an API key and an e-mail address is recommended for large queries.
 
 Step 2 — Extract text
 ---------------------
@@ -92,20 +96,68 @@ Step 2 — Extract text
 :mod:`atunapy.TextExtract` retrieves and cleans the text of the articles
 found in the previous step.
 
+To run a text query you will need to provide a prompt that describes the task you want the LLM to perform. The best results are obtained when the prompt is clear and specific. 
+
+You also need to provide a list of variables that will be extracted by the LLM. An example of such df is shown below. 
+
+.. code-block:: python
+   df = pd.DataFrame({
+    'Name': ['ototoxic drugs', 'otoprotective drugs', 'effects', 'mechanism of ototoxicity'],
+    'Description': ["Any ototoxic drugs or molecules", 
+                    "Any drugs or molecules mentioned as protective against ototoxicity or used to treat drug-induced hearing loss.", 
+                    'Clasify the ototoxicity as "Cochleo-toxicity", "Vestibulo-toxicity", "Dizzines", "not mentioned" or "Other"', 
+                    "Note the described mechanism for the ototoxic compounds  mentioned (e.g., cochlear hair cell damage, vasoconstriction). Give a very short answer."],
+    'Type': ["List", "List", "String", "String"]
+    })
+
+
+To define the prompt, you can use the following template. You can modify it to suit your specific needs:
+
 .. code-block:: python
 
-   # TODO: TextExtract example from the notebook
+   tool = TextExtract.LLMTextExtractor(
+                 prompt = """You are an expert pharmacologist specializing in otolaryngology. 
+                  Your task is to extract drug information from the following research article.
+
+                  Definitions:
+                  - Ototoxic Agent: A drug or molecule that causes damage to the inner ear (cochleotoxicity or vestibulotoxicity), hearing loss or dizziness.
+                  - Otoprotective Agent: A compound that prevents or mitigates such damage.
+
+                  Instructions:
+                  1. Identify all drugs, molecules, or experimental compounds mentioned.
+                  2. Determine their role: "Ototoxic" or "Otoprotective".
+                  """,
+                 variables = df
+                 )
+
+
+Once you have defined the prompt and variables, you can run the text extraction process on the articles retrieved from PubMed. 
+
+.. code-block:: python
+
+   results = tool.process_articles(df = articles[:10], # Test with a small subset of articles first, once you are satisfied with the results, you can process the entire dataset.
+                                    LLM = "Gemini",
+                                    api_key = os.environ.get('GEMINI_KEY'), 
+                                    model = "gemini-3.5-flash-lite",)   
+   print("Claude extraction complete.")
+
+
+.. note::
+   To avoid exceeding usage limits, it is recommended to test with a small subset of articles first, once you are satisfied with the results, you can process the entire dataset.
+
 
 Step 3 — Query PubChem
 ----------------------
 
 :mod:`atunapy.PubChemSearcher` looks up compound names mentioned in the text
-and returns PubChem records (CID, IUPAC name, SMILES, ...).
+and returns PubChem records (CID, IUPAC name, SMILES, InChIKey and synonyms).
 
 .. code-block:: python
+   compounds = PubChemSearcher.fetch_compound_info(df=results,
+                                            columns=["ototoxic_drugs", "otoprotective_drugs"] # List with the names of the columns in the results DataFrame that contain the compound names to be queried in PubChem
+                                            )
 
-   # TODO: PubChemSearcher example from the notebook
-
+   
 Step 4 — Curate SMILES
 ----------------------
 
@@ -114,14 +166,8 @@ obtained from PubChem.
 
 .. code-block:: python
 
-   # TODO: SMILEScuration example from the notebook
+   compounds["Clean_SMILES"] = [SMILEScuration.standardize(x) for x in compounds["smiles"]]
 
-Expected output
----------------
-
-.. code-block:: text
-
-   # TODO: paste a short sample of the resulting table / DataFrame
 
 Next steps
 ----------
