@@ -1,5 +1,3 @@
-# aTUNApy
-
 <img width="760" height="576" alt="image" src="https://github.com/user-attachments/assets/e21d3dbd-0234-4c08-9dcd-4c5bf2de6316" />
 
 
