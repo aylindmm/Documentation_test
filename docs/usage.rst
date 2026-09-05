@@ -157,7 +157,7 @@ and returns PubChem records (CID, IUPAC name, SMILES, InChIKey and synonyms).
                                             columns=["ototoxic_drugs", "otoprotective_drugs"] # List with the names of the columns in the results DataFrame that contain the compound names to be queried in PubChem
                                             )
 
-   
+
 Step 4 — Curate SMILES
 ----------------------
 
