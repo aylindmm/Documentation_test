@@ -6,6 +6,12 @@
 aTUNApy documentation
 =====================
 
+.. image:: _build/html/_static/atunapy_logo.png
+   :alt: aTUNApy workflow
+   :width: 600px
+   :align: center
+
+
 .. toctree::
    :maxdepth: 2
 

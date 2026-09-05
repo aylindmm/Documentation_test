@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "atunapy"  # Name on PyPI
-version = "1.0"
+version = "1.1.1"
 authors = [{ name="Aylin del Moral", email="aylindmm@gmail.com" }]
 description = "A package for LLM-aided literature extraction."
 readme = "README.md"
