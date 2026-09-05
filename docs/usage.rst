@@ -5,14 +5,6 @@ This page walks through a typical aTUNApy workflow: searching PubMed for
 articles, extracting text, retrieving compound information from PubChem, and
 curating SMILES strings.
 
-Installation
-------------------------
-
-.. code-block:: bash
-
-   pip install atunapy
-
-
 Before start
 ------------------------
 .. note::
