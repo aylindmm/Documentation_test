@@ -188,4 +188,4 @@ compounds["Clean_SMILES"] = [SMILEScuration.standardize(x) for x in compounds["s
 
 ## Next steps
 
-See the API documentation for the full list of functions and parameters in each module.
+See the [API documentation](https://atunapy.readthedocs.io/en/latest/) for the full list of functions and parameters in each module.
