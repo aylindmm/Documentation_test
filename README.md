@@ -1,5 +1,8 @@
 # aTUNApy
 
+<img width="760" height="576" alt="image" src="https://github.com/user-attachments/assets/e21d3dbd-0234-4c08-9dcd-4c5bf2de6316" />
+
+
 A Python toolkit for mining the biomedical literature: search PubMed for articles, extract structured information from their text with an LLM, look up the compounds mentioned in PubChem, and curate the resulting SMILES strings.
 
 ## Table of contents
